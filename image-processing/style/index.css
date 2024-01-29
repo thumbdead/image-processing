@@ -1,118 +1,88 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
+* {
+  box-sizing: border-box;
   padding: 0;
-  background-color: #f0f0f0;
+  margin: 0;
+}
+
+body {
+  background-color: lightgray;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .container {
-  max-width: 1200px;
+  display: grid;
+  grid-template-rows: 40px 360px 350px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .header {
   background-color: #333;
-  color: #fff;
+  color: white;
+  grid-row: 1;
+  grid-column: 1 / -1;
   padding: 10px;
 }
 
 .nav {
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
-.nav > li {
-  display: inline-block;
-  position: relative;
-}
-
-.nav > li > span {
-  display: block;
-  padding: 10px 20px;
-  color: #fff;
+.nav li span {
+  background-color: black;
+  color: white;
   text-decoration: none;
-}
-
-.nav li ul {
-  display: none;
-  position: absolute;
-  background-color: #333;
-  padding: 0;
-  border-top: 1px solid #666;
-  z-index: 1;
-}
-
-.nav li:hover ul {
+  padding: 10px 15px;
   display: block;
 }
 
-.nav li ul li {
-  display: block;
-}
-
-.nav li ul li span {
-  display: block;
-  padding: 10px 20px;
-  color: #fff;
-  text-decoration: none;
-}
-
-.img-container1, .img-container2, .img-container3, .img-container4, .img-container5, .img-container6 {
-  margin-top: 20px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.img-container1, .img-container2, .img-container4 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.img-item {
-  margin-bottom: 20px;
-}
-
-canvas {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.item {
-  margin-bottom: 10px;
-}
-
-#color {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-}
-
-#files {
-  display: none;
-}
-
-#files + label {
-  background-color: #333;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 5px;
+.nav li span:hover {
+  background-color: darkolivegreen;
   cursor: pointer;
 }
 
-#list {
-  display: block;
-  margin-top: 10px;
-  color: #333;
+.nav > li {
+  float: left;
 }
 
-#list2 {
+.nav ul {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  background-color: black;
+  color: white;
+}
+
+.nav li:hover > ul {
   display: block;
-  margin-top: 10px;
-  color: #333;
+}
+
+.nav ul li {
+  position: relative;
+}
+
+.nav ul li ul {
+  right: -160px;
+  top: 0;
+}
+
+.img-container1,
+.img-container2,
+.img-container3,
+.img-container4,
+.img-container5,
+.img-container6 {
+  background-color: #fff;
+  padding: 10px;
+}
+
+output,
+li {
+  font-size: 10px;
+}
+
+#color {
+  padding: 2px 20px;
+  background-color: black;
 }
