@@ -245,6 +245,161 @@ function rain2(evt) {
     init();
     animate2();
 }
+//codigo para niebla
+// Variables adicionales para el efecto de niebla
+var ctx = pantalla2;
+var w;
+var h;
+var numberOfParticles = 20;
+var particlesArray = [];
+
+function initializeFogEffect() {
+    // Inicialización
+    var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
+    w = imagenSal.getWidth();
+    h = imagenSal.getHeight();
+
+    // Creación de partículas para simular la niebla
+    for (var i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new FogParticle(w, h, ctx));
+    }
+}
+
+var fogImage = new Image();  // Crear una nueva imagen para la niebla
+fogImage.src = 'nube.png';  // Reemplaza con la ruta correcta de tu imagen de niebla
+
+var fogOffsetX = 0;  // Inicializa el desplazamiento en el eje X
+
+function animateFogEffect() {
+    // Dibuja la imagen original en el lienzo
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(imgLocal.getImage(), 0, 0, w, h);
+
+    // Desplaza la imagen de niebla y la dibuja
+    ctx.globalAlpha = 0.5;  // Ajusta la opacidad según tus preferencias
+    ctx.drawImage(fogImage, fogOffsetX, 0, w, h);
+    ctx.drawImage(fogImage, fogOffsetX - w, 0, w, h);  // Dibuja una segunda copia para simular un desplazamiento continuo
+    ctx.globalAlpha = 1;  // Restablece la opacidad
+
+    // Incrementa el desplazamiento para el próximo cuadro de animación
+    fogOffsetX += 1;  // Ajusta la velocidad de desplazamiento según tus preferencias
+
+    // Reinicia el desplazamiento cuando la imagen se ha movido completamente fuera de la pantalla
+    if (fogOffsetX >= w) {
+        fogOffsetX = 0;
+    }
+
+    requestAnimationFrame(animateFogEffect);
+}
+function startFogEffect(evt) {
+    initializeFogEffect();
+    animateFogEffect();
+}
+
+//efecto pelota
+class Ball {
+    constructor(width, height, context) {
+        this.radius = Math.random() * 10 + 5; // Radio aleatorio entre 5 y 15
+        this.x = Math.random() * (width - 2 * this.radius) + this.radius; // Posición inicial x aleatoria
+        this.y = Math.random() * (height - 2 * this.radius) + this.radius; // Posición inicial y aleatoria
+        this.speedX = Math.random() * 4 - 2; // Velocidad inicial en el eje X (entre -2 y 2)
+        this.speedY = Math.random() * 4 - 2; // Velocidad inicial en el eje Y (entre -2 y 2)
+        this.color = getRandomColor(); // Color aleatorio
+        this.context = context;
+    }
+
+    update() {
+        // Actualiza la posición de la pelota y maneja el rebote en los bordes
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x - this.radius < 0 || this.x + this.radius > w) {
+            this.speedX = -this.speedX;
+        }
+
+        if (this.y - this.radius < 0 || this.y + this.radius > h) {
+            this.speedY = -this.speedY;
+        }
+    }
+
+    draw() {
+        // Dibuja la pelota en la posición actual
+        this.context.fillStyle = this.color;
+        this.context.beginPath();
+        this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        this.context.fill();
+    }
+}
+
+function getRandomColor() {
+    // Genera un color aleatorio en formato RGB
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r},${g},${b})`;
+}
+
+var ballsArray = [];
+
+function initializeBouncingBalls() {
+    // Inicializa el array de pelotas
+    for (var i = 0; i < numberOfParticles; i++) {
+        ballsArray.push(new Ball(w, h, ctx));
+    }
+}
+
+function animateBouncingBalls() {
+    // Dibuja la imagen original en el lienzo
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(imgLocal.getImage(), 0, 0, w, h);
+
+    // Actualiza y dibuja cada pelota
+    for (var i = 0; i < ballsArray.length; i++) {
+        ballsArray[i].update();
+        ballsArray[i].draw();
+    }
+
+    requestAnimationFrame(animateBouncingBalls);
+}
+
+function startBouncingBalls(evt) {
+    initializeBouncingBalls();
+    animateBouncingBalls();
+}
+
+
+
+
+// Clase para representar las partículas de niebla
+class FogParticle {
+    constructor(width, height, context) {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.radius = Math.random() * 2;
+        this.context = context;
+        this.speed = 1;  // Aumenté la velocidad para que sea más evidente
+    }
+
+    update() {
+        // Mueve la partícula hacia arriba para simular la ascensión de la niebla
+        this.y -= this.speed;
+
+        // Reaparece en la parte inferior cuando sale de la pantalla
+        if (this.y < 0) {
+            this.y = height;
+            this.x = Math.random() * width;
+        }
+    }
+
+    draw() {
+        // Dibuja la partícula
+        this.context.fillStyle = 'rgba(200, 200, 200, 0.2)';
+        this.context.beginPath();
+        this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        this.context.fill();
+    }
+}
+
 //codigo para efecto de particulas
 var particleArray;
 var mouse = {
@@ -286,6 +441,13 @@ function animateParticles() {
     }
     requestAnimationFrame(animateParticles);
 }
+
+
+
+
+
+
+
 //seccion de histogramas  
 function histogramas(evt) {
     var imagenSal = new ImageType(pantalla1, imgLocal.getImage());
@@ -452,3 +614,6 @@ document.getElementById("op-rotacion").addEventListener('click', rotarImagen2, f
 document.getElementById("op-shearingX").addEventListener('click', shearingX, false);
 document.getElementById("op-shearingY").addEventListener('click', shearingY, false);
 document.getElementById("op-afin").addEventListener('click', tAfin, false);
+//efectos con movimiento para ´proyecto final
+document.getElementById("niebla").addEventListener('click', startFogEffect, false);
+document.getElementById("pelota").addEventListener('click', startBouncingBalls, false);
